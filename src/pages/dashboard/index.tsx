@@ -1,0 +1,4 @@
+import React
+export const Dashboard = () =>{
+    return <div>Dashboard</div>
+}
