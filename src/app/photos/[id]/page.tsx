@@ -1,28 +1,18 @@
-'use client'
 import React from 'react';
-import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {QueryClient} from "@tanstack/react-query";
 import {getPhotoById} from "@/services/photo-api";
-import classNames from "classnames";
-import {Loader} from "@/components/Loader";
-import {useParams} from "next/navigation";
+import Link from "next/link";
+import {ImageAsync} from "@/components/ImageAsync";
 
-const PhotoPage = () => {
-    const id = useParams().id as string;
-    const [showImg, setShowImg] = React.useState(false);
+type Props = { params: Promise<{ id: string }> };
 
-    useQueryClient();
-    const query = useQuery({queryKey: ['photo', id], queryFn: () => getPhotoById(id || '0')});
+const PhotoPage = async ({params}:Props) => {
+    const {id} = await params
 
-    if(query.isPending){
-        return <Loader/>
-    }
-    if(query.isError) {
-        return <div className="p-2">
-            {'An error has occurred: '+ query.error}
-        </div>
-    }
+    const queryClient = new QueryClient();
+    const photo = await queryClient.fetchQuery({queryKey: ['photo', id], queryFn: () => getPhotoById(id || '0')});
 
-    if (!query.data) {
+    if (!photo) {
         return <div className="p-2">
             <h1>Photo not found</h1>
         </div>
@@ -35,24 +25,16 @@ const PhotoPage = () => {
             </li>
             <li>/</li>
             <li className="" aria-current="page">
-                <a
+                <Link
                     className="text-blue-600 visited:text-purple-600"
-                    href="/photos">Photos</a>
+                    href="/photos">Photos</Link>
             </li>
             <li>/</li>
             <li className="font-bold text-blue-700" aria-current="page">{id}</li>
         </ol>
-        <h1>{query.data.title}</h1>
-        <a className="text-blue-600 visited:text-purple-600" href={"/albums/" + query.data.albumId}>View Album</a>
-        {!showImg && (<div><Loader/></div>)}
-        <img src={query.data.url}
-             alt={query.data.url.split('/').pop()}
-             onLoad={() => setShowImg(true)}
-             onError={() => setShowImg(true)}
-             className={classNames([
-                 "w-auto bg-gray-200 rounded-lg h-[300px] md:h-[600px] object-cover m-auto",
-            ])}
-        />
+        <h1>{photo.title}</h1>
+        <a className="text-blue-600 visited:text-purple-600" href={"/albums/" + photo.albumId}>View Album</a>
+        <ImageAsync url={photo.url} width={600} height={600}/>
     </div>
 }
 
