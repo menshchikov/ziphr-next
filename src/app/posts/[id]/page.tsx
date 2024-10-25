@@ -1,26 +1,17 @@
-'use client'
-import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {QueryClient} from "@tanstack/react-query";
 import {getPostById} from "@/services/post-api";
-import {Loader} from "@/components/Loader";
-import {useParams} from "next/navigation";
 import Link from "next/link";
+import {PostComponent} from "@/app/posts/[id]/PostComponent";
 
-const Page = () => {
-    const params = useParams();
-    const id = params.id as string;
-    console.log(params);
-    useQueryClient();
-    const {isPending, isError, data: post, error} = useQuery({
+type Props = { params: Promise<{ id: string }> };
+const Page = async ({params}: Props) => {
+
+    const {id} = await params;
+    const queryClient = new QueryClient()
+    const post = await queryClient.fetchQuery({
         queryKey: ['post', id],
-        queryFn: () => getPostById(id || '0'),
-    })
-
-    if(isPending){
-        return <Loader/>
-    }
-    if(isError){
-        return <div>{'Error: '+error}</div>
-    }
+        queryFn: () => getPostById(id),
+    });
 
     return (<div className="p-2">
         <ol className="flex flex-row gap-2">
@@ -31,13 +22,12 @@ const Page = () => {
             <li>/</li>
             <li className="breadcrumb-item">
                 <Link className="text-blue-600 visited:text-purple-600"
-                   href="/posts">Posts</Link>
+                      href="/posts">Posts</Link>
             </li>
             <li>/</li>
             <li className="font-bold text-blue-700">{id}</li>
         </ol>
-        <h1 className="font-bold text-4xl mt-3">{post?.title}</h1>
-        <p>{post?.body}</p>
+        <PostComponent post={post}/>
     </div>)
 }
 

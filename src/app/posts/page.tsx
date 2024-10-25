@@ -48,9 +48,6 @@ function PostsPage() {
         router.push(`?${searchParams}`);
     }
 
-    if (isPending) {
-        return <Loader/>
-    }
     if (isError) {
         return <div>{'Error: ' + error}</div>
     }
@@ -84,8 +81,8 @@ function PostsPage() {
                 </select>
             </div>
         </div>
-
-        <PostsTable postsCollection={postsCollection} page={page} onPageChange={pageChange}/>
+        {isPending && <Loader/>}
+        {!isPending && <PostsTable postsCollection={postsCollection} page={page} onPageChange={pageChange}/>}
 
     </div>);
 }
