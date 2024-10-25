@@ -34,7 +34,7 @@ const PhotoPage = async ({params}:Props) => {
         </ol>
         <h1>{photo.title}</h1>
         <a className="text-blue-600 visited:text-purple-600" href={"/albums/" + photo.albumId}>View Album</a>
-        <ImageAsync url={photo.url} width={600} height={600}/>
+        <ImageAsync url={photo.url} width={600} height={600} className="w-auto bg-gray-100 rounded-lg h-[300px] md:h-[600px] object-cover m-auto"/>
     </div>
 }
 
