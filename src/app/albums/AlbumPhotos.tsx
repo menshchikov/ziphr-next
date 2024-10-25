@@ -18,8 +18,6 @@ export function AlbumPhotos(props: { albumId: number }) {
     return <div className="p-2 grid grid-cols-4 gap-2">
         {data?.slice(0, 4).map(photo => <a href={"/photos/" + photo.id} key={photo.id}>
             <div className="border border-gray-200 rounded-lg overflow-hidden">
-                {/*<img src={photo.thumbnailUrl} alt={photo.thumbnailUrl.split('/').pop()}*/}
-                {/*     className="w-full h-[4rem] object-cover"/>*/}
                 <ImageAsync url={photo.thumbnailUrl} width={200} height={200} className="w-full h-[4rem] object-cover" />
             </div>
         </a>)}
