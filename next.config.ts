@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
             fullUrl: true,
         },
     },
+    images: {
+        unoptimized: true,
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "via.placeholder.com",
+                port: "",
+            },
+        ],
+    },
 };
 
 export default nextConfig;
