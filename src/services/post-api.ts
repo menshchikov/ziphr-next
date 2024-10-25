@@ -11,7 +11,6 @@ export async function getPosts(userId?:string): Promise<Post[]> {
     if (userId) {
         url += '?userId=' + userId;
     }
-    console.log('fetch ',url);
     const res = await fetch(url);
     return await res.json();
 }
@@ -33,7 +32,6 @@ export async function getPostsInternal(filterType: string, filterValue: string, 
     if (params) {
         url += '?' + params;
     }
-    console.log('fetch ',url);
     const res = await fetch(url);
     return await res.json();
 }

@@ -7,7 +7,6 @@ export const revalidate = 60
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
-    console.log(searchParams);
     const userId = searchParams.get('userId');
     const page = Number(searchParams.get('page')) || 1;
     const title = searchParams.get('title');
